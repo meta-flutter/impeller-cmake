@@ -36,7 +36,12 @@ message(SEND_ERROR
 endif()
 
 find_package(OpenGL REQUIRED)
-target_link_libraries(impeller_renderer PUBLIC ${OPENGL_LIBRARIES})
+if (GLFW_BUILD_WAYLAND)
+    target_link_libraries(impeller_renderer PUBLIC OpenGL::EGL)
+endif()
+if (GLFW_BUILD_X11)
+    target_link_libraries(impeller_renderer PUBLIC OpenGL::GLX)
+endif()
 target_include_directories(impeller_renderer
     PUBLIC
         $<BUILD_INTERFACE:${GLES_INCLUDE_DIR}>) # For includes starting with "GLES/"
